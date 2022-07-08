@@ -1,4 +1,5 @@
 import React, {ChangeEvent, useState} from "react";
+import {Simulate} from "react-dom/test-utils";
 
 
 type RatingPropsType = {
@@ -15,14 +16,16 @@ export function Rating(props: RatingPropsType) {
         console.log(e.currentTarget.value)
         setValue(e.currentTarget.value)
     }
-
+    const clickSelected = (val:string) => {
+        setValue(val)
+    }
     return (
         <div>
-            <Star selected={value > '0'}/>
-            <Star selected={value > '1'}/>
-            <Star selected={value > '2'}/>
-            <Star selected={value > '3'}/>
-            <Star selected={value > '4'}/>
+            <Star selected={value > '0'} clickSelected={()=>{clickSelected('1')}} />
+            <Star selected={value > '1'} clickSelected={()=>{clickSelected('2')}}/>
+            <Star selected={value > '2'} clickSelected={()=>{clickSelected('3')}}/>
+            <Star selected={value > '3'} clickSelected={()=>{clickSelected('4')}}/>
+            <Star selected={value > '4'} clickSelected={()=>{clickSelected('5')}}/>
             <div>
                 <input type={"range"} min={0} max={5} value={value} onChange={onChangeValue}/>{value}
             </div>
@@ -32,9 +35,13 @@ export function Rating(props: RatingPropsType) {
 
 type StarPropsType = {
     selected: boolean
+    clickSelected: any
 }
 
 function Star(props: StarPropsType) {
+    const onClickSelected = () => {
+        props.clickSelected()
+    }
     console.log('Star rendering')
-    return props.selected ? <span><b>star</b> </span> : <span>star </span>
+    return props.selected ? <span><b>star</b> </span > : <span onClick={onClickSelected}>star </span>
 }
